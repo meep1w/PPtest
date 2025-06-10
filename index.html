@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no" />
   <title>ProfitPump Card</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/style/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 
@@ -90,6 +91,24 @@
         </div>
         <span class="settings-row-arrow"></span>
       </div>
+
+      <div class="settings-toggle">
+        <span class="toggle-label">Включить спарки</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-sparks">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="settings-toggle">
+        <span class="toggle-label">Включить анимацию</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-effects">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+
     </div>
     <button class="settings-policy-btn" id="settings-policy-btn">Политика конфиденциальности</button>
   </div>
@@ -320,7 +339,7 @@
         <span id="boost-balance-amount">0</span>
       </div>
     </div>
-    
+
     <!-- Блок: Бесплатные бусты -->
     <div class="boost-popup-section">
       <div class="boost-popup-section-title" id="boost-daily-title">Бесплатные дневные бусты</div>
@@ -335,7 +354,7 @@
         <span class="popup-row-value" id="boost-turbo-left">5/5</span>
       </div>
     </div>
-    
+
     <!-- Блок: Улучшения -->
     <div class="boost-popup-section">
       <div class="boost-popup-section-title" id="boost-upgrade-title">Улучшения</div>
@@ -431,8 +450,6 @@
 </div>
 
 
-
-  <audio id="tap-sound" src="src/sound/tap.wav" preload="auto"></audio>
 <script src="src/script/main.js"></script>
 <script src="src/script/stars.js"></script>
 
