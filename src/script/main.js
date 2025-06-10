@@ -1,5 +1,19 @@
 // =============== ГЛОБАЛЬНЫЕ НАСТРОЙКИ ===================
 const tg = window.Telegram?.WebApp || {};
+// === Управление видимостью навбара ===
+const navbar = document.querySelector('.bottom-navbar');
+
+
+function toggleNavbar(hidden) {
+  if (hidden) {
+    navbar.style.pointerEvents = 'none';
+    navbar.style.opacity = '0';
+  } else {
+    navbar.style.pointerEvents = 'auto';
+    navbar.style.opacity = '1';
+  }
+}
+
 let disableSparks = localStorage.getItem('disableSparks') === 'true';
 let disableEffects = localStorage.getItem('disableEffects') === 'true';
 
@@ -516,22 +530,33 @@ function onTap(x, y) {
 // =========== SETTINGS POPUP LOGIC =============
   function settingsInit() {
     const openSettingsBtn = document.getElementById('open-settings-btn');
+    openSettingsBtn.onclick = () => {
+      document.getElementById('settings-popup').classList.add('visible');
+      toggleNavbar(true); // Скрыть навбар
+    };
+
     const settingsPopup = document.getElementById('settings-popup');
     if (openSettingsBtn && settingsPopup) {
       openSettingsBtn.onclick = () => {
         updateLangAll();
         settingsPopup.classList.add('show');
         document.body.classList.add('popup-open');
-
+        toggleNavbar(true); // 👈 добавляем сюда!
       };
+
       document.getElementById('settings-close-btn').onclick = () => {
-        settingsPopup.classList.remove('show');
+        document.getElementById('settings-popup').classList.remove('visible');
+        toggleNavbar(false); // Показать навбар
       };
-      settingsPopup.onclick = (e) => {
-        if (e.target === settingsPopup) settingsPopup.classList.remove('show');
-        document.body.classList.remove('popup-open');
 
+      settingsPopup.onclick = (e) => {
+        if (e.target === settingsPopup) {
+          settingsPopup.classList.remove('show');
+          toggleNavbar(false); // 👈 ЭТОГО НЕ ХВАТАЛО
+        }
+        document.body.classList.remove('popup-open');
       };
+
       document.getElementById('settings-lang-row').onclick = () => {
         showSlidePopup('settings-lang-popup');
       };
@@ -624,10 +649,12 @@ function onTap(x, y) {
 function showSlidePopup(id) {
   document.querySelectorAll('.settings-popup-slide').forEach(p => p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
-  document.body.classList.add('popup-open'); // 👈 добавляем!
+  document.body.classList.add('popup-open'); // ✅ ок
   document.getElementById('settings-popup')?.classList.remove('show');
 
+  toggleNavbar(true); // ✅ ДОБАВЬ ЭТУ СТРОКУ — скрыть .bottom-navbar
 }
+
 
 
 function hideSlidePopups() {
@@ -635,6 +662,8 @@ function hideSlidePopups() {
 
   // Показываем обратно основной popup настроек
   document.getElementById('settings-popup')?.classList.add('show');
+  toggleNavbar(true); // ← Это то, что ты не вызывал в этой части
+
 
   // popup-open должен остаться, если show добавлен снова
   document.body.classList.add('popup-open');

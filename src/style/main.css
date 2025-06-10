@@ -236,6 +236,12 @@ body {
   background: radial-gradient(circle, rgb(194, 194, 194), transparent);
 }
 
+.tap-flash,
+#tap-sparks,
+#card-btn {
+  pointer-events: none; /* не мешают клику по navbar */
+}
+
 .tap-flash.active {
   animation: flashAnim 650ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -389,7 +395,7 @@ body {
   position: fixed;
   right: 0;
   bottom: 25px;
-  z-index: 1;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1167,7 +1173,7 @@ body {
 .settings-policy-content strong {
   color: #fff;
 }
-
+/**/
 
 
 /* Hide scroll for popups */
@@ -1691,6 +1697,3 @@ body {
   transform: translateX(18px);
 }
 
-body.popup-open .bottom-navbar {
-  display: none !important;
-}
