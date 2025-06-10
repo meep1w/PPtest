@@ -1,8 +1,11 @@
 // =============== ГЛОБАЛЬНЫЕ НАСТРОЙКИ ===================
 const tg = window.Telegram?.WebApp || {};
+// Инициализация Telegram WebApp API
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready();
+}
+
 const divisionThresholds = [0, 20000, 50000, 90000, 150000, 220000, 300000, 400000, 550000, 700000, 1000000];
-const tapSound = document.getElementById('tap-sound');
-tapSound.volume = 0.01; // громкость 30%
 const tapFlash = document.querySelector('.tap-flash');
 
 const i18n = {
@@ -312,17 +315,18 @@ function handleCardMouse(e) {
   onTap(e.clientX, e.clientY);
 }
 
-document.addEventListener('click', (e) => {
+function handleClick(e) {
   hasUserInteracted = true;
   onTap(e.clientX, e.clientY);
-});
+}
+
+
 
 
 function onTap(x, y) {
   // звук + вибрация
-  if (hasUserInteracted && tapSound) {
-    tapSound.currentTime = 0;
-    tapSound.play().catch(e => console.log("Audio error:", e));
+  if (hasUserInteracted) {
+
     if (window.Telegram?.WebApp?.HapticFeedback) {
       Telegram.WebApp.HapticFeedback.impactOccurred('light'); // для iPhone в Telegram
     } else if (navigator.vibrate) {
@@ -397,6 +401,11 @@ document.addEventListener('DOMContentLoaded', () => {
   cardUser.textContent = user.username;
   cardDate.textContent = user.registered;
   renderCard(); renderDivisionPanel(); renderEnergy(); renderBoostPopup();
+
+  const cardBtn = document.getElementById('card-btn');
+  if (cardBtn) {
+    cardBtn.addEventListener('click', handleClick);
+  }
 
   // Boost popup logic
   const boostBtn = document.getElementById('boost-btn');
