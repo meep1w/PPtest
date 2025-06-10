@@ -2,7 +2,7 @@
 const tg = window.Telegram?.WebApp || {};
 const divisionThresholds = [0, 20000, 50000, 90000, 150000, 220000, 300000, 400000, 550000, 700000, 1000000];
 const tapSound = document.getElementById('tap-sound');
-tapSound.volume = 0.05; // громкость 30%
+tapSound.volume = 0.01; // громкость 30%
 const tapFlash = document.querySelector('.tap-flash');
 
 const i18n = {
@@ -323,9 +323,12 @@ function onTap(x, y) {
   if (hasUserInteracted && tapSound) {
     tapSound.currentTime = 0;
     tapSound.play().catch(e => console.log("Audio error:", e));
-    if (navigator.vibrate) navigator.vibrate(30);
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+      Telegram.WebApp.HapticFeedback.impactOccurred('light'); // для iPhone в Telegram
+    } else if (navigator.vibrate) {
+      navigator.vibrate(30); // для Android
+    }
   }
-
 
 
   triggerSparks(x, y); // Добавит анимацию искр
