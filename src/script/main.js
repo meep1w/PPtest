@@ -2,6 +2,7 @@
 const tg = window.Telegram?.WebApp || {};
 const divisionThresholds = [0, 20000, 50000, 90000, 150000, 220000, 300000, 400000, 550000, 700000, 1000000];
 const tapSound = document.getElementById('tap-sound');
+tapSound.volume = 0.05; // громкость 30%
 const tapFlash = document.querySelector('.tap-flash');
 
 const i18n = {
@@ -126,6 +127,7 @@ let energyUpgradeLevel = 0, multitapLevel = 0;
 let energy = 0, energyRestoreCount = 0, turboUses = 0;
 let energyRestoreDate = "", turboUsesDate = "";
 let turboActive = false, turboEndTime = 0, turboTimeout = null;
+let hasUserInteracted = false;
 
 
 
@@ -309,12 +311,22 @@ function handleCardMouse(e) {
   if (Date.now() - lastTouchTime < 400) return;
   onTap(e.clientX, e.clientY);
 }
+
+document.addEventListener('click', (e) => {
+  hasUserInteracted = true;
+  onTap(e.clientX, e.clientY);
+});
+
+
 function onTap(x, y) {
-  // звук
-  if (tapSound) {
+  // звук + вибрация
+  if (hasUserInteracted && tapSound) {
     tapSound.currentTime = 0;
     tapSound.play().catch(e => console.log("Audio error:", e));
+    if (navigator.vibrate) navigator.vibrate(30);
   }
+
+
 
   triggerSparks(x, y); // Добавит анимацию искр
 
@@ -848,3 +860,4 @@ function triggerSparks(x, y) {
   const cy = y - rect.top;
   createSpark(cx, cy);
 }
+
