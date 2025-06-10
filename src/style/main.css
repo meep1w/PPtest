@@ -29,9 +29,9 @@ body {
 .tap-plus {
   position: fixed;
   z-index: 99999;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  color: #21f37c;
+  color: #ffffff;
   pointer-events: none;
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -82,14 +82,15 @@ body {
   height: 58px;
   min-width: 48px;
   min-height: 48px;
-  border-radius: 9px;
+  border-radius: 60px;
   object-fit: contain;
-  background: #23262b;
+  background: rgba(255, 255, 255, 0);
   box-shadow: 0 0 0 2px #3331, 0 2px 10px 0 #0002;
   flex-shrink: 0;
   display: block;
-  margin-right: 10px;
+
 }
+
 
 
 /* Центральная часть */
@@ -214,6 +215,38 @@ body {
     padding-right: 7px;
   }
 }
+
+.tap-flash {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  margin-left: -80px;
+  margin-top: -80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 248, 248, 0.93), transparent);
+}
+
+.tap-flash.active {
+  animation: flashAnim 300ms ease-out;
+}
+
+@keyframes flashAnim {
+  0% {
+    opacity: 0.8;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+
 /* ---- КАРТА ---- */
 .card-container {
   position: relative;
@@ -226,25 +259,7 @@ body {
   max-width: 100vw;
   box-sizing: border-box;
 }
-.bank-card {
-  position: relative;
-  width: 94vw;
-  max-width: 350px;
-  aspect-ratio: 16 / 10;
-  border: 1px solid rgba(255,255,255,0.19);
-  border-radius: 24px;
-  padding: 0;
-  background: rgba(255,255,255,0.08);
-  box-shadow: 0 8px 36px #0007, 0 2px 8px #003a;
-  backdrop-filter: blur(18px) saturate(1.18);
-  -webkit-backdrop-filter: blur(18px) saturate(1.18);
-  overflow: hidden;
-  cursor: pointer;
-  user-select: none;
-  outline: none;
-  z-index: 2;
-  margin-bottom: 0;
-}
+
 .bank-card.pulse {
   animation: pulse 0.19s cubic-bezier(.47,1.64,.41,.86);
 }
@@ -310,7 +325,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 68px;
+  max-width: 150px;
 }
 .card-date-box {
   display: flex;
@@ -352,21 +367,22 @@ body {
   text-decoration: none;
   position: fixed;
   right: 0;
-  bottom: 0;
+  bottom: 25px;
   z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 0 4px 0;
-  background: rgba(255, 255, 255, 0);       
+  background: rgba(49, 49, 49, 0.58);
   border-top: 2px solid #232326;
   width: 100vw;
   min-height: 54px;
-  max-width: 100vw;
+  max-width: 350px;
   margin: 0 auto;
   left: 50%;
   transform: translateX(-50%);
   transition: background 0.18s;
+  border-radius: 20px;
 }
 .bottom-navbar a {
   text-decoration: none !important;
@@ -387,7 +403,7 @@ body {
   transition: color 0.15s, font-weight 0.18s;
   min-width: 0;
   min-height: 52px;
-  color: #fff !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 .nav-icon svg {
   display: block;
@@ -1647,7 +1663,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgb(255, 231, 0);
+  background: rgb(34, 255, 0);
   backdrop-filter: blur(2px);
   color: #000000;
   font-size: 12px;
@@ -1669,7 +1685,7 @@ body {
 
 .farm-label {
   position: absolute;
-  bottom: 17px;
+  bottom: 27px;
   left: 12px;
   font-size: 13px;
   color: #fff;
@@ -1679,7 +1695,7 @@ body {
 
 .farm-coins {
   position: absolute;
-  bottom: 3px;
+  bottom: 7px;
   left: 12px;
   font-size: 14px;
   font-weight: 700;
@@ -1701,7 +1717,7 @@ body {
 
 @keyframes floatCoin {
   0% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+  50% { transform: translateX(-50%) translateY(15px); }
   100% { transform: translateX(-50%) translateY(0); }
 }
 
@@ -1753,11 +1769,11 @@ body {
   overflow: hidden;
   padding: 20px 24px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgb(44, 43, 43);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
     0 10px 30px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;

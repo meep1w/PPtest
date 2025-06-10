@@ -1,6 +1,8 @@
 // =============== ГЛОБАЛЬНЫЕ НАСТРОЙКИ ===================
 const tg = window.Telegram?.WebApp || {};
 const divisionThresholds = [0, 20000, 50000, 90000, 150000, 220000, 300000, 400000, 550000, 700000, 1000000];
+const tapSound = document.getElementById('tap-sound');
+const tapFlash = document.querySelector('.tap-flash');
 
 const i18n = {
   ru: {
@@ -309,6 +311,24 @@ function handleCardMouse(e) {
   onTap(e.clientX, e.clientY);
 }
 function onTap(x, y) {
+  // звук
+  if (tapSound) {
+    tapSound.currentTime = 0;
+    tapSound.play();
+  }
+
+// вспышка
+  if (tapFlash) {
+    tapFlash.classList.remove('active');
+    void tapFlash.offsetWidth; // перезапуск анимации
+    tapFlash.classList.add('active');
+  }
+
+// вибрация
+  if (navigator.vibrate) navigator.vibrate(10);
+
+
+
   if (!useEnergy(1)) return;
   let clickPoints = (turboActive ? 5 : 1) * getMultitapBonus();
   coins += clickPoints; divisionPoints += clickPoints;
