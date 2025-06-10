@@ -126,8 +126,7 @@ let energyUpgradeLevel = 0, multitapLevel = 0;
 let energy = 0, energyRestoreCount = 0, turboUses = 0;
 let energyRestoreDate = "", turboUsesDate = "";
 let turboActive = false, turboEndTime = 0, turboTimeout = null;
-const TURBO_PAID_COST = 20;
-const ENERGY_PAID_COST = 20;
+
 
 
 
@@ -317,6 +316,9 @@ function onTap(x, y) {
     tapSound.play();
   }
 
+  triggerSparks(x, y); // Добавит анимацию искр
+
+
 // вспышка
   if (tapFlash) {
     tapFlash.classList.remove('active');
@@ -493,7 +495,8 @@ function settingsInit() {
     };
     document.querySelectorAll('.settings-lang-row').forEach(row => {
       row.onclick = () => {
-        const selectedLang = row.getAttribute('data-lang');
+        lang = row.getAttribute('data-lang');
+
         lang = selectedLang;
         localStorage.setItem('settingsLang', lang);
         updateLangAll();
@@ -763,3 +766,85 @@ farmStartBtn.addEventListener("click", startFarm);
 farmClaimBtn.addEventListener("click", claimFarm);
 
 });
+
+const canvas = document.getElementById('tap-sparks');
+const ctx = canvas.getContext('2d');
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+});
+
+let particles = [];
+
+function createSpark(x, y) {
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 2 + 1;
+    particles.push({
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      radius: Math.random() * 3 + 2,
+      alpha: 3,
+      color: 'rgb(255,255,255)' // нежно-голубой
+
+    });
+  }
+}
+
+function updateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p, index) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.alpha -= 0.01; // медленнее исчезают
+
+    if (p.alpha <= 0) {
+      particles.splice(index, 1);
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+
+      // Устанавливаем яркий цвет + свечение
+      const rgb = hexToRgb(p.color); // например, "255,255,255"
+      ctx.fillStyle = `rgba(${rgb},${p.alpha})`;
+      ctx.shadowColor = `rgba(${rgb},${Math.min(1, p.alpha * 1.5)})`;
+      ctx.shadowBlur = 10;
+
+      ctx.fill();
+    }
+  });
+
+  requestAnimationFrame(updateParticles);
+}
+
+
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+      ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}`
+      : "255,255,255"; // fallback
+}
+
+
+function hslToRgbString(hsl) {
+  let tmp = document.createElement("div");
+  tmp.style.color = hsl;
+  document.body.append(tmp);
+  let rgb = getComputedStyle(tmp).color.match(/\d+,\s*\d+,\s*\d+/)[0];
+  tmp.remove();
+  return rgb;
+}
+
+updateParticles(); // запускаем цикл
+
+function triggerSparks(x, y) {
+  const rect = canvas.getBoundingClientRect();
+  const cx = x - rect.left;
+  const cy = y - rect.top;
+  createSpark(cx, cy);
+}
