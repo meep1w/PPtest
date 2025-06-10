@@ -313,7 +313,7 @@ function onTap(x, y) {
   // звук
   if (tapSound) {
     tapSound.currentTime = 0;
-    tapSound.play();
+    tapSound.play().catch(e => console.log("Audio error:", e));
   }
 
   triggerSparks(x, y); // Добавит анимацию искр
